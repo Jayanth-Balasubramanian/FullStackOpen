@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-const DisplayAnecdote = ({text, votes}) => {
+const Anecdote = ({text, votes}) => {
   return (
       <p> {text} <br /> has {votes} {votes === 1? "vote": "votes"}</p>
   )
 }
 
-const DisplayMostVoted = ({anecdotes, votes}) => {
+const MostVoted = ({anecdotes, votes}) => {
   const maxVotes = Math.max(...votes)
   if (maxVotes === 0) {
     return (
@@ -15,7 +15,7 @@ const DisplayMostVoted = ({anecdotes, votes}) => {
   } else {
     const text = anecdotes[votes.indexOf(maxVotes)]
     return (
-        <DisplayAnecdote text={text} votes={maxVotes} />
+        <Anecdote text={text} votes={maxVotes} />
     )
   }
 }
@@ -54,10 +54,10 @@ const App = () => {
   return (
       <div>
         <h1> Anecdote of the day </h1>
-        <DisplayAnecdote text={anecdotes[selected]} votes={votes[selected]} />
+        <Anecdote text={anecdotes[selected]} votes={votes[selected]} />
         <Buttons increment={incrementVote} selectRandom={selectRandomAnecdote} />
         <h1> Anecdote with most votes </h1>
-        <DisplayMostVoted anecdotes={anecdotes} votes={votes} />
+        <MostVoted anecdotes={anecdotes} votes={votes} />
       </div>
   )
 }
