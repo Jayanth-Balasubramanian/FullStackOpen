@@ -1,21 +1,8 @@
-const Header = ({text}) => (
-    <h3> {text} </h3>
-)
+import {Header} from "./Header";
+import {Content} from "./Content";
+import {Total} from "./Total";
 
-const Part = ({part}) =>
-    <p>
-      {part.name} {part.exercises}
-    </p>
 
-const Content = ({parts}) => (
-    <>
-      {parts.map(part => <Part part={part} />)}
-    </>
-)
-
-const Total = ({parts}) => (
-    <p> <b> Total of {parts.reduce((total, part) => total + part.exercises, 0)} exercises </b> </p>
-)
 
 const Course = ({course}) => (
     <>
