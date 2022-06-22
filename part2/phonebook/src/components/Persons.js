@@ -1,8 +1,8 @@
 import Person from "./Person";
-export const Persons = ({display, persons}) => (
+export const Persons = ({filter, display, persons, handleDelete}) => (
     <div>
-      {(display.length === 0? persons: display)
-          .map(contact => <Person key={contact.id} number={contact.number} name={contact.name} />)}
+      {(display.length === 0 || filter.length === 0? persons: display)
+          .map(person => <Person key={person.id} person={person} handleDelete={() => handleDelete(person.id)}/>)}
     </div>
 )
 

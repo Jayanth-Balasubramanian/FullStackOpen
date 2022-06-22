@@ -2,35 +2,81 @@ import {useEffect, useState} from 'react'
 import {Persons} from "./components/Persons";
 import {Filter} from "./components/Filter";
 import {PersonForm} from "./components/PersonsForm";
-import axios from "axios";
+import personService from "./services/persons"
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  } else {
+    const {content, className} = message
+    return (
+        <div className={className}>
+          {content}
+        </div>
+    )
+  }
+}
 const App = () => {
-  const [persons, setPersons] = useState([ ])
+  const [message, setMessage] = useState(null)
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState('')
   const [display, setDisplay] = useState([])
+  const [filter, setFilter] = useState('')
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
   const handleFilterChange = e => {
-    setDisplay(persons.filter(x => x.name.toLowerCase().includes(e.target.value)))
+    setFilter(e.target.value)
+    setDisplay(persons.filter(x => x.name.toLowerCase().includes(filter)))
   }
   const handleNumberChange = e => {
     setNumber(e.target.value)
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (persons.filter(x => x.name === newName).length === 0) {
-      const newPersons = [...persons, {'name': newName, 'number': number, 'id': persons.length + 1}]
-      setPersons(newPersons)
-      console.log(newPersons)
+    const matchingPersons = persons.filter(x => x.name === newName)
+    if (matchingPersons.length === 0) {
+      const newPerson = {'name': newName, 'number': number}
+
+      personService.create(newPerson).then((response) => {
+        const newPersons = [...persons, response.data]
+        setPersons(newPersons)
+        setMessage({content: `Added ${newPerson.name}`, className: "success"})
+        setTimeout(() => setMessage(null), 5000)
+      })
     } else {
-      alert(`${newName} is already added to phonebook`)
+      const updatedPerson = {...matchingPersons[0], 'number': number}
+      handleUpdate(updatedPerson.id, updatedPerson)
     }
+    setNewName('')
+    setNumber('')
   }
   const fetchData = () => {
-    axios.get("http://localhost:3001/persons").then(response => setPersons(response.data))
+    personService.getAll().then(response => setPersons(response.data))
   }
 
+  const handleDelete = id => {
+    const toDeleteName = persons.filter(person => person.id === id)[0].name
+    if (window.confirm(`Do you want to delete ${toDeleteName}?`)) {
+      const newPersons = persons.filter(person => person.id !== id)
+      personService.deletePerson(id).then(() => setPersons(newPersons))
+    }
+  }
+
+  const handleUpdate = (id, updatedPerson) => {
+    if (window.confirm(`${updatedPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+      personService.update(id, updatedPerson).then(response => {
+        setPersons(persons.map(person => person.id !== id? person: response.data))
+      }).catch(e => {
+        console.log(e)
+        if (e.response.status === 404) {
+          setMessage({content: `Information of ${updatedPerson.name} has already been removed from server`,
+            className:'error'})
+          setTimeout(() => setMessage(null), 3000)
+        }
+      })
+    }
+  }
   useEffect(() => {
     fetchData()
   }, []);
@@ -38,12 +84,13 @@ const App = () => {
   return (
       <div>
         <h2>Phonebook</h2>
+        <Notification message={message}/>
         <Filter onChange={handleFilterChange}/>
         <h2> add a new </h2>
         <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}
                     handleSubmit={handleSubmit}/>
         <h2>Numbers</h2>
-        <Persons display={display} persons={persons}/>
+        <Persons filter={filter} display={display} persons={persons} handleDelete={handleDelete}/>
       </div>
   )
 }
