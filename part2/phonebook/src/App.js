@@ -27,12 +27,12 @@ const App = () => {
   }
   const handleFilterChange = e => {
     setFilter(e.target.value)
-    setDisplay(persons.filter(x => x.name.toLowerCase().includes(filter)))
+    setDisplay(persons.filter(x => x.name.toLowerCase().includes(e.target.value)))
   }
   const handleNumberChange = e => {
     setNumber(e.target.value)
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const matchingPersons = persons.filter(x => x.name === newName)
     if (matchingPersons.length === 0) {
@@ -43,13 +43,15 @@ const App = () => {
         setPersons(newPersons)
         setMessage({content: `Added ${newPerson.name}`, className: "success"})
         setTimeout(() => setMessage(null), 5000)
+      }).catch(e => {
+        console.log(e.response.data)
+        setMessage({content: e.response.data.error, className: "error"})
+        setTimeout(() => setMessage(null), 5000)
       })
     } else {
       const updatedPerson = {...matchingPersons[0], 'number': number}
       handleUpdate(updatedPerson.id, updatedPerson)
     }
-    setNewName('')
-    setNumber('')
   }
   const fetchData = () => {
     personService.getAll().then(response => setPersons(response.data))
@@ -68,12 +70,8 @@ const App = () => {
       personService.update(id, updatedPerson).then(response => {
         setPersons(persons.map(person => person.id !== id? person: response.data))
       }).catch(e => {
-        console.log(e)
-        if (e.response.status === 404) {
-          setMessage({content: `Information of ${updatedPerson.name} has already been removed from server`,
-            className:'error'})
-          setTimeout(() => setMessage(null), 3000)
-        }
+        console.log(e.response.data.error)
+        setMessage({content: e.response.data.error, className: 'error'})
       })
     }
   }
