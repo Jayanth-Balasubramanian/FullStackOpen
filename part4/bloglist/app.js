@@ -5,7 +5,7 @@ const blogsRouter = require('./controllers/blogs');
 const config = require('./utils/config');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
-
+const {unknownEndpoint, errorHandler} = require('./utils/middleware');
 mongoose.connect(config.MONGODB_URL,
     {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
@@ -18,5 +18,6 @@ mongoose.connect(config.MONGODB_URL,
 app.use(cors());
 app.use(express.json());
 app.use('/api/blogs', blogsRouter);
-
+app.use(errorHandler);
+app.use(unknownEndpoint);
 module.exports = app;

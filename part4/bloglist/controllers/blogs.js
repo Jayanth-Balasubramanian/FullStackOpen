@@ -9,12 +9,18 @@ blogsRouter.get('/', (request, response) => {
       });
 });
 
-blogsRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body);
+blogsRouter.post('/', (request, response, next) => {
+  const blog = new Blog({
+    title: request.body.title,
+    author: request.body.author,
+    url: request.body.url,
+    likes: request.body.likes,
+  });
   blog.save()
       .then((result) => {
         response.status(201).json(result);
-      });
+      })
+      .catch((error) => next(error));
 });
 
 module.exports = blogsRouter;
