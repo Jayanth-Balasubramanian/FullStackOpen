@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Notification from './Notification';
 
 function LoginForm({
@@ -11,7 +12,6 @@ function LoginForm({
       <form>
         <div>
           username
-          {' '}
           <input
             type="text"
             value={username}
@@ -33,4 +33,16 @@ function LoginForm({
   );
 }
 
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  message: PropTypes.string,
+};
+
+LoginForm.defaultProps = {
+  message: null,
+};
 export default LoginForm;
