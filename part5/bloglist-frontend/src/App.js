@@ -115,7 +115,9 @@ function App() {
           <h1>blogs</h1>
           <Notification message={message} />
           <div>
-            <p> {`${user.name} logged in`}
+            <p>
+              {' '}
+              {`${user.name} logged in`}
               <button type="button" onClick={handleLogout}>logout</button>
               <br />
             </p>

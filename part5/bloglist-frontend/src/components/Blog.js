@@ -33,8 +33,10 @@ function Blog({
     <div style={blogStyle}>
       {!showDetails && (
         <div>
-          {`${blog.title} ${blog.author}`}
-          <button type="button" onClick={displayDetails}>view</button>
+          <p>
+            {`${blog.title} ${blog.author}`}
+            <button type="button" onClick={displayDetails}>view</button>
+          </p>
         </div>
       )}
 
@@ -44,12 +46,20 @@ function Blog({
             {`${blog.title} ${blog.author}`}
             <button type="button" onClick={hideDetails}>hide</button>
           </p>
-          <p> {blog.url} </p>
+          <p>
+            {' '}
+            {blog.url}
+            {' '}
+          </p>
           <p>
             {`likes ${blog.likes}`}
             <button type="button" onClick={addLike}> like</button>
           </p>
-          <p> {blog.user.name} </p>
+          <p>
+            {' '}
+            {blog.user.name}
+            {' '}
+          </p>
           {blog.user.username === user.username
             && <button type="button" onClick={handleDelete}>delete</button>}
         </div>
