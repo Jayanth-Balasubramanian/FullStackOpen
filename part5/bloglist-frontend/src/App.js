@@ -17,7 +17,8 @@ function App() {
   const compareBlogs = (x, y) => {
     if (x.likes > y.likes) {
       return -1;
-    } if (x.likes === y.likes) {
+    }
+    if (x.likes === y.likes) {
       return 0;
     }
     return 1;
@@ -118,7 +119,7 @@ function App() {
             <p>
               {' '}
               {`${user.name} logged in`}
-              <button type="button" onClick={handleLogout}>logout</button>
+              <button id="logout-button" type="button" onClick={handleLogout}>logout</button>
               <br />
             </p>
           </div>

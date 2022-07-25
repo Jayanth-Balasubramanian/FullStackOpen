@@ -30,14 +30,12 @@ function Blog({
     setShowDetails(false);
   };
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       {!showDetails && (
-        <div>
-          <p>
-            {`${blog.title} ${blog.author}`}
-            <button type="button" onClick={displayDetails}>view</button>
-          </p>
-        </div>
+        <p>
+          {`${blog.title} ${blog.author}`}
+          <button id="view-button" type="button" onClick={displayDetails}>view</button>
+        </p>
       )}
 
       {showDetails && (
@@ -47,21 +45,17 @@ function Blog({
             <button type="button" onClick={hideDetails}>hide</button>
           </p>
           <p>
-            {' '}
             {blog.url}
-            {' '}
           </p>
           <p>
             {`likes ${blog.likes}`}
-            <button type="button" onClick={addLike}> like</button>
+            <button id="like-button" type="button" onClick={addLike}> like</button>
           </p>
           <p>
-            {' '}
             {blog.user.name}
-            {' '}
           </p>
           {blog.user.username === user.username
-            && <button type="button" onClick={handleDelete}>delete</button>}
+            && <button id="delete-button" type="button" onClick={handleDelete}>delete</button>}
         </div>
       )}
     </div>

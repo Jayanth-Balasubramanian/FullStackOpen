@@ -33,7 +33,7 @@ function BlogForm({ createBlog }) {
           {' '}
           <input id="url" value={url} onChange={({ target }) => setUrl(target.value)} />
         </div>
-        <button type="submit"> submit</button>
+        <button id="submit-blog-button" type="submit"> submit</button>
       </form>
     </div>
   );

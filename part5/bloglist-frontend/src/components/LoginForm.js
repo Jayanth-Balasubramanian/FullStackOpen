@@ -13,6 +13,7 @@ function LoginForm({
         <div>
           username
           <input
+            id="username"
             type="text"
             value={username}
             name="Username"
@@ -21,12 +22,17 @@ function LoginForm({
         </div>
         <div>
           password
-          {' '}
-          <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
+          <input
+            id="password"
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
         </div>
 
         <div>
-          <button type="submit" onClick={handleSubmit}>login</button>
+          <button id="login-button" type="submit" onClick={handleSubmit}>login</button>
         </div>
       </form>
     </div>
